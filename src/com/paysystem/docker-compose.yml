@@ -1,30 +1,45 @@
-version: '3.8'
-
 services:
-  database:
+  mysql:
     image: mysql:8.0
-    container_name: my_database
+    container_name: payment_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: yara2001
-      MYSQL_DATABASE: payment_system
-      MYSQL_USER: aliyara
-      MYSQL_PASSWORD: yara2001
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-12345678}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-payment_system}
+      MYSQL_USER: ${MYSQL_USER:-aliyara}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-yara2001}
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
-      - db_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb-buffer-pool-size=256M
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: myapp-phpmyadmin
-    restart: always
+    container_name: payment_phpmyadmin
     environment:
-      PMA_HOST: database
+      PMA_HOST: mysql
       PMA_USER: root
-      PMA_PASSWORD: yara2001
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-12345678}
+      UPLOAD_LIMIT: 256M
     ports:
-      - "8080:80"
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
-  db_data:
+  mysql_data:
+    driver: local
