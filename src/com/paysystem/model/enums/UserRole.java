@@ -1,8 +1,8 @@
 package com.paysystem.model.enums;
 
 public enum UserRole {
-    MANAGER,
-    RESPONSABLE,
+    DIRECTOR,
+    RESPONSIBLE,
     AGENT,
     INTERN
 }

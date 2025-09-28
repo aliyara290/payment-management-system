@@ -46,3 +46,11 @@ INSERT INTO payments (id, amount, reason, agent_id)
 VALUES
     (UUID_TO_BIN('aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), 2500.00, 'Monthly salary', UUID_TO_BIN('f47ac10b-58cc-4372-a567-0e02b2c3d479')),
     (UUID_TO_BIN('ffffffff-1111-2222-3333-444444444444'), 500.50, 'Project bonus', UUID_TO_BIN('f47ac10b-58cc-4372-a567-0e02b2c3d479'));
+
+
+ALTER TABLE users MODIFY COLUMN password VARCHAR(255) NOT NULL;
+
+ALTER TABLE users MODIFY COLUMN role ENUM('director', 'agent', 'responsible', 'intern') DEFAULT 'agent';
+
+
+SELECT * FROM users WHERE firstName = 'Ali';

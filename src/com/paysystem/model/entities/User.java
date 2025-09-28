@@ -4,7 +4,7 @@ import com.paysystem.model.enums.UserRole;
 import com.paysystem.utils.IdGenerator;
 
 public abstract class User {
-    protected String id;
+//    protected String id;
     protected String firstName;
     protected String lastName;
     protected String email;
@@ -12,7 +12,7 @@ public abstract class User {
     protected UserRole userRole;
 
     public User(String email, String firstName, String lastName, String password, UserRole userRole) {
-        this.id  = IdGenerator.generateId();
+//        this.id  = IdGenerator.generateId();
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,10 +26,6 @@ public abstract class User {
 
     public String getFirstName() {
         return firstName;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getLastName() {
