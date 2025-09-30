@@ -3,16 +3,15 @@ package com.paysystem.model.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Departement {
+public class Department {
 
-    private String responsibleId;
+    private int responsibleId;
     private String name;
     private List<User> employees;
 
-    public Departement(List<User> employees, String name, String responsibleId) {
-        this.employees = new ArrayList<>();;
+    public Department(String name) {
         this.name = name;
-        this.responsibleId = responsibleId;
+        this.employees = new ArrayList<>();;
     }
 
     public List<User> getEmployees() {
@@ -31,11 +30,11 @@ public class Departement {
         this.name = name;
     }
 
-    public String getResponsibleId() {
+    public int getResponsibleId() {
         return responsibleId;
     }
 
-    public void setResponsibleId(String responsibleId) {
+    public void setResponsibleId(int responsibleId) {
         this.responsibleId = responsibleId;
     }
 }

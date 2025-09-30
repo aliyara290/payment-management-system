@@ -17,12 +17,13 @@ public class AuthRepositoryImpl implements AuthInterface {
 
 
     @Override
-    public boolean register(String firstName, String lastName, String email, String password, String role) {
+    public boolean register(String firstName, String lastName, String email, String password, UserRole role) {
+        String hashPassword = HashPassword.hashPassword(password);
         return Crud.create("users", Map.of(
-                "firstName", firstName,
-                "lastName", lastName,
+                "first_name", firstName,
+                "last_name", lastName,
                 "email", email,
-                "password", password,
+                "password", hashPassword,
                 "role", role
         ));
     }
@@ -33,26 +34,27 @@ public class AuthRepositoryImpl implements AuthInterface {
             UserRole role = UserRole.valueOf(user.get("role").toUpperCase());
 
             return switch (role) {
-                case DIRECTOR -> Optional.of(new Director(user.get("email"), user.get("firstName"), user.get("lastName"), user.get("password"), role));
-                case RESPONSIBLE -> Optional.of(new Responsible(user.get("email"), user.get("firstName"), user.get("lastName"), user.get("password"), role, null));
-                case AGENT, INTERN -> Optional.of(new Agent(user.get("email"), user.get("firstName"), user.get("lastName"), user.get("password"), role, null, null));
+                case DIRECTOR -> Optional.of(new Director(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role));
+                case RESPONSIBLE -> Optional.of(new Responsible(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null));
+                case AGENT, INTERN -> Optional.of(new Agent(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null, null));
                 default -> throw new IllegalArgumentException("Unknown user role: " + role);
             };
+
         }
         return Optional.empty();
     }
 
 
     @Override
-    public List<User> listAll() {
-        return List.of();
+    public List<Map<String, Object>> listAll() {
+        return Crud.readAll("users");
     }
 
 
-    @Override
-    public void deleteById(String id) {
-
-    }
+//    @Override
+//    public void deleteById(String id) {
+//
+//    }
 
     @Override
     public List<Map<String, String>> findByEmail(String email) {
@@ -63,9 +65,12 @@ public class AuthRepositoryImpl implements AuthInterface {
         return userExist;
     }
 
-    @Override
-    public Optional<User> findById(String id) {
-        return Optional.empty();
-    }
+//    @Override
+//    public Optional<User> findById(String id) {
+//        return Optional.empty();
+//    }
+//
+
+
 }
 

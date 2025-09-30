@@ -10,17 +10,18 @@ public class Crud {
 
     public Crud() throws SQLException {
         connection = DatabaseConnection.getConnection();
+
     }
 
-    public static boolean create(String table, Map<String, String> data) {
+    public static boolean create(String table, Map<String, Object> data) {
         String columns = String.join(",", data.keySet());
-        String placeholders = String.join(",", data.keySet().stream().map(k -> "?").toList());
+        String placeholders = String.join(",", data.keySet().stream().map(k ->   "?").toList());
         String sql = "INSERT INTO " + table + " (" + columns + ") VALUES (" + placeholders + ")";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             int index = 1;
-            for (String value : data.values()) {
-                stmt.setString(index++, value);
+            for (Object value : data.values()) {
+                stmt.setObject(index++, value);
             }
             stmt.executeUpdate();
             return true;
@@ -30,7 +31,7 @@ public class Crud {
         }
     }
 
-    public static boolean update(String table, Map<String, Object> data, String condition, String condValue) {
+    public static boolean update(String table, Map<String, Object> data, String condition, Object condValue) {
         String setClause = String.join(",", data.keySet().stream().map(k -> k + " = ?").toList());
         String sql = "UPDATE " + table + " SET " + setClause + " WHERE " + condition + " = ?";
 
@@ -39,7 +40,7 @@ public class Crud {
             for (Object value : data.values()) {
                 stmt.setObject(index++, value);
             }
-            stmt.setString(index, condValue);
+            stmt.setObject(index, condValue);
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -48,11 +49,11 @@ public class Crud {
         }
     }
 
-    public static boolean delete(String table, String condition, String condValue) {
+    public static boolean delete(String table, String condition, Object condValue) {
         String sql = "DELETE FROM " + table + " WHERE " + condition + " = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, condValue);
+            stmt.setObject(1, condValue);
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -61,12 +62,12 @@ public class Crud {
         }
     }
 
-    public static List<Map<String, String>> readByCondition(String table, String condition, String condValue) {
+    public static List<Map<String, String>> readByCondition(String table, String condition, Object condValue) {
         String sql = "SELECT * FROM " + table + " WHERE " + condition + " = ?";
         List<Map<String, String>> results = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, condValue);
+            stmt.setObject(1, condValue);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData meta = rs.getMetaData();
             int columnCount = meta.getColumnCount();

@@ -14,4 +14,20 @@ public class Agent extends User{
         this.departementId = departementId;
         this.payments = new ArrayList<>();
     }
+
+    public String getDepartementId() {
+        return departementId;
+    }
+
+    public void setDepartementId(String departementId) {
+        this.departementId = departementId;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
 }
