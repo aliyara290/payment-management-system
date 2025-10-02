@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class DirectorController {
     private final DirectorService directorService;
     private final Scanner scanner;
+
     public DirectorController(DirectorInterface directorRepository) {
         this.directorService = new DirectorService(directorRepository);
         this.scanner = new Scanner(System.in);

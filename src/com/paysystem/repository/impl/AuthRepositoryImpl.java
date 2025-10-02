@@ -17,7 +17,7 @@ public class AuthRepositoryImpl implements AuthInterface {
 
 
     @Override
-    public boolean register(String firstName, String lastName, String email, String password, UserRole role) {
+    public boolean register(String firstName, String lastName, String email, String password, String role) {
         String hashPassword = HashPassword.hashPassword(password);
         return Crud.create("users", Map.of(
                 "first_name", firstName,
@@ -30,13 +30,15 @@ public class AuthRepositoryImpl implements AuthInterface {
 
     public Optional<User> login(String email, String password) {
         Map<String, String> user = findByEmail(email).getFirst();
-        if(!user.isEmpty() && HashPassword.verifyPassword(password, user.get("password"))) {
+        if (!user.isEmpty() && HashPassword.verifyPassword(password, user.get("password"))) {
             UserRole role = UserRole.valueOf(user.get("role").toUpperCase());
-
             return switch (role) {
-                case DIRECTOR -> Optional.of(new Director(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role));
-                case RESPONSIBLE -> Optional.of(new Responsible(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null));
-                case AGENT, INTERN -> Optional.of(new Agent(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null, null));
+                case DIRECTOR ->
+                        Optional.of(new Director(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role));
+                case RESPONSIBLE ->
+                        Optional.of(new Responsible(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null));
+                case AGENT, INTERN ->
+                        Optional.of(new Agent(user.get("email"), user.get("first_name"), user.get("last_name"), user.get("password"), role, null, null));
                 default -> throw new IllegalArgumentException("Unknown user role: " + role);
             };
 
@@ -51,26 +53,24 @@ public class AuthRepositoryImpl implements AuthInterface {
     }
 
 
-//    @Override
-//    public void deleteById(String id) {
-//
-//    }
-
     @Override
     public List<Map<String, String>> findByEmail(String email) {
         List<Map<String, String>> userExist = Crud.readByCondition("users", "email", email);
-        if(userExist.isEmpty()) {
+        if (userExist.isEmpty()) {
             return List.of();
         }
         return userExist;
     }
 
-//    @Override
-//    public Optional<User> findById(String id) {
-//        return Optional.empty();
-//    }
-//
-
-
+    @Override
+    public boolean updateEmployee(String employeeEmail, Map<String, Object> data) {
+        String employeeId = Crud.readByCondition("users", "email", employeeEmail).getFirst().get("id");
+        try {
+            return Crud.update("users", data, "id", employeeId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 }
 

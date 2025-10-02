@@ -6,21 +6,18 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class MainMenu {
-    //    private Optional<User> user;
     private final Scanner scanner;
-    private DirectorMenu directorMenu;
     private AuthMenu authMenu;
 
     public MainMenu() {
         this.authMenu = new AuthMenu();
-        this.directorMenu = new DirectorMenu();
         this.scanner = new Scanner(System.in);
     }
 
     public void handleAuthenticate() {
         Optional<User> user = authMenu.authMenuConsole();
         if (user.isPresent()) {
-            showMainDashboard(user);
+            showMainDashboard(user.get());
         } else {
             System.out.println("You can now login with this account!");
             System.out.println("=============================================");
@@ -29,26 +26,34 @@ public class MainMenu {
         }
     }
 
-
-    private void showMainDashboard(Optional<User> user) {
+    private void showMainDashboard(User user) {
         boolean inDashboard = true;
 
         while (inDashboard) {
-            System.out.println("\n" + "=".repeat(60));
-            System.out.printf(" WELCOME %s %s (%s) \n", user.get().getFirstName().toUpperCase(), user.get().getLastName().toUpperCase(), user.get().getUserRole());
-            System.out.println("=".repeat(60));
-            System.out.println("========= DASHBOARD OPTIONS =========");
+            System.out.println("\n ================================================");
+            System.out.printf("            WELCOME %s %s (%s) \n",
+                    user.getFirstName().toUpperCase(),
+                    user.getLastName().toUpperCase(),
+                    user.getUserRole());
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||");
+            System.out.println("\n ================================================");
+            System.out.println("/n =============== DASHBOARD OPTIONS ==============");
+            System.out.println("\n ================================================");
 
-            switch (user.get().getUserRole()) {
+            switch (user.getUserRole()) {
                 case DIRECTOR:
+                    // Pass the logged user to DirectorMenu
+                    DirectorMenu directorMenu = new DirectorMenu(user);
                     directorMenu.DirectorMenuConsole();
                     break;
                 case RESPONSIBLE:
-//                    showResponsibleOptions();
+                    // ResponsibleMenu responsibleMenu = new ResponsibleMenu(user);
+                    // responsibleMenu.ResponsibleMenuConsole();
                     System.out.println("not yet!");
                     break;
                 case AGENT:
-//                    showAgentOptions();
+                    // AgentMenu agentMenu = new AgentMenu(user);
+                    // agentMenu.AgentMenuConsole();
                     System.out.println("not yet!");
                     break;
                 case INTERN:
@@ -64,10 +69,8 @@ public class MainMenu {
                 int choice = Integer.parseInt(scanner.nextLine().trim());
 
                 if (choice == 0) {
-//                    authController.logout();
+                    System.out.println("Logging out...");
                     inDashboard = false;
-                } else {
-//                    handleDashboardChoice(choice, user);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number!");

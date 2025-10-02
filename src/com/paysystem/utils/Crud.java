@@ -93,7 +93,6 @@ public class Crud {
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData meta = rs.getMetaData();
             int columnCount = meta.getColumnCount();
-
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {

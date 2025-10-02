@@ -7,6 +7,8 @@ import com.paysystem.repository.interfaces.AuthInterface;
 import com.paysystem.service.AuthService;
 import com.paysystem.utils.HashPassword;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -21,8 +23,10 @@ public class AuthController {
     }
 
     public Optional<User> login() {
-        System.out.println("====== LOGIN ======");
-        System.out.println("Enter your email: ");
+        System.out.println("\n================================================");
+        System.out.println("==================== LOG IN ====================");
+        System.out.println("================================================");
+        System.out.println("\n Enter your email: ");
         String email = scanner.nextLine();
         System.out.println("Enter your password: ");
         String password = scanner.nextLine();
@@ -118,8 +122,9 @@ public class AuthController {
                 break;
         }
 
+
         if (role != null) {
-            boolean success = authService.register(firstName, lastName, email, password, role);
+            boolean success = authService.register(firstName, lastName, email, password, role.toString());
             if (success) {
                 System.out.println("User registered successfully!");
                 return true;
@@ -133,4 +138,37 @@ public class AuthController {
         return false;
     }
 
+    public void updateUser() {
+        System.out.println("=================================================");
+        System.out.println("================ UPDATE EMPLOYEE ================");
+        System.out.println("=================================================");
+
+        System.out.println("Enter employee email: ");
+        String email = scanner.nextLine();
+        System.out.println("\n============================================================================");
+        System.out.println("  Update employee, let the input empty if you don't want to update a field");
+        System.out.println("============================================================================");
+
+        System.out.println("\n Enter employee new First Name: ");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter employee new Last Name: ");
+        String lastName = scanner.nextLine();
+        System.out.println("Enter employee new Email: ");
+        String email2 = scanner.nextLine();
+        System.out.println("Enter employee new Role: ");
+        String role = scanner.nextLine();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("first_name", firstName);
+        data.put("last_name", lastName);
+        data.put("email", email);
+        data.put("role", role);
+
+        boolean isUpdated = authService.updateUser(email, data);
+        if (isUpdated) {
+            System.out.println("Employee updated successfully!");
+        } else  {
+            System.out.println("Failed to update user!");
+        }
+    }
 }

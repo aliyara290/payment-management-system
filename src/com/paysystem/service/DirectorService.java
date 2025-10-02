@@ -22,13 +22,18 @@ public class DirectorService {
             System.out.println("DepartmentName is empty!");
             return Optional.empty();
         }
-
-        boolean isCreated = directorRepository.createDepartment(departmentName);
-        if (isCreated) {
-            Department dept = new Department(departmentName);
-            return Optional.of(dept);
+        try {
+            boolean isCreated = directorRepository.createDepartment(departmentName);
+            if (isCreated) {
+                Department dept = new Department(departmentName);
+                return Optional.of(dept);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Optional.empty();
         }
-        return Optional.empty();
+
     }
 
     public boolean updateDepartment(String departmentName, String newDepartmentName) {

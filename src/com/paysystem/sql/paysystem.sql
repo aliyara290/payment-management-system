@@ -32,4 +32,4 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (agent_id) REFERENCES users (id)
 );
 
-
+select * from users;
