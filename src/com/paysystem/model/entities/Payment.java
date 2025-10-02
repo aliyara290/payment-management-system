@@ -10,16 +10,13 @@ public class Payment {
     private double amount;
     private String reason;
     private int employeeId;
-    private Date paymentDate;
     private TypePayment typePayment;
 
-    public Payment(int paymentId, double amount, TypePayment typePayment, String reason, int employeeId, Date paymentDate) {
-        this.paymentId = paymentId;
+    public Payment(double amount, TypePayment typePayment, String reason, int employeeId) {
         this.amount = amount;
         this.reason = reason;
         this.typePayment = typePayment;
         this.employeeId = employeeId;
-        this.paymentDate = new Date();
     }
 
     public double getAmount() {
@@ -36,14 +33,6 @@ public class Payment {
 
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public int getPaymentId() {
@@ -77,7 +66,6 @@ public class Payment {
                 ", paymentId=" + paymentId +
                 ", reason='" + reason + '\'' +
                 ", employeeId=" + employeeId +
-                ", paymentDate=" + paymentDate +
                 '}';
     }
 }

@@ -56,18 +56,4 @@ public class AuthMenu {
         return Optional.empty();
     }
 
-//    private void showResponsibleOptions() {
-//        System.out.println("1. Manage Department Users");
-//        System.out.println("2. Approve Payments");
-//        System.out.println("3. Department Statistics");
-//        System.out.println("4. Generate Reports");
-//    }
-//
-//    private void showAgentOptions() {
-//        System.out.println("1. Create Payment Request");
-//        System.out.println("2. View My Payments");
-//        System.out.println("3. Update Profile");
-//        System.out.println("4. My Statistics");
-//    }
-
 }

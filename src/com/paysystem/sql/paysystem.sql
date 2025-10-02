@@ -32,4 +32,6 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (agent_id) REFERENCES users (id)
 );
 
-select * from users;
+ALTER TABLE payments ADD type enum('salary', 'bonus', 'prime', 'compensation');
+
+select * from payments;
