@@ -1,9 +1,6 @@
 package com.paysystem.model.entities;
 
 import com.paysystem.model.enums.TypePayment;
-import org.w3c.dom.Text;
-
-import java.util.Date;
 
 public class Payment {
     private int paymentId;

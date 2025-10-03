@@ -30,56 +30,42 @@ public class MainMenu {
         boolean inDashboard = true;
 
         while (inDashboard) {
-            System.out.println("\n ================================================");
+            System.out.println("\n" + "=".repeat(60));
             System.out.printf("            WELCOME %s %s (%s) \n",
                     user.getFirstName().toUpperCase(),
                     user.getLastName().toUpperCase(),
                     user.getUserRole());
-            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||");
-            System.out.println("\n ================================================");
-            System.out.println("/n =============== DASHBOARD OPTIONS ==============");
-            System.out.println("\n ================================================");
+            System.out.println("=".repeat(60));
 
             switch (user.getUserRole()) {
                 case DIRECTOR:
-                    // Pass the logged user to DirectorMenu
                     DirectorMenu directorMenu = new DirectorMenu(user);
                     directorMenu.DirectorMenuConsole();
+                    inDashboard = false; // Exit after director menu
                     break;
+
                 case RESPONSIBLE:
-                    // ResponsibleMenu responsibleMenu = new ResponsibleMenu(user);
-                    // responsibleMenu.ResponsibleMenuConsole();
-                    System.out.println("not yet!");
+                    ResponsibleMenu responsibleMenu = new ResponsibleMenu(user);
+                    responsibleMenu.ResponsibleMenuConsole();
+                    inDashboard = false; // Exit after responsible menu
                     break;
+
                 case AGENT:
-                    // AgentMenu agentMenu = new AgentMenu(user);
-                    // agentMenu.AgentMenuConsole();
-                    System.out.println("not yet!");
+                    AgentMenu agentMenu = new AgentMenu(user);
+                    agentMenu.AgentMenuConsole();
+                    inDashboard = false; // Exit after agent menu
                     break;
+
                 case INTERN:
-                    System.out.println("Unfortunately there is no options for you!");
-                    break;
-            }
-
-            System.out.println("0. Logout");
-            System.out.println("=".repeat(60));
-            System.out.print("Your choice: ");
-
-            try {
-                int choice = Integer.parseInt(scanner.nextLine().trim());
-
-                if (choice == 0) {
-                    System.out.println("Logging out...");
+                    System.out.println("\n📝 INTERN DASHBOARD");
+                    System.out.println("Unfortunately, there are no options available for interns.");
+                    System.out.println("\nPress Enter to logout...");
+                    scanner.nextLine();
                     inDashboard = false;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number!");
-            }
-
-            if (inDashboard) {
-                System.out.println("\nPress Enter to continue...");
-                scanner.nextLine();
+                    break;
             }
         }
+
+        System.out.println("\n👋 Logged out successfully. Goodbye!");
     }
 }
