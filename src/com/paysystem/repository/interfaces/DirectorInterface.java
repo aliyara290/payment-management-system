@@ -10,7 +10,6 @@ public interface DirectorInterface {
     Map<String, String> getDepartment(String departmentName);
     List<Map<String, Object>> getAllDepartment();
     boolean assignResponsibleToDepartment(String departmentName, String responsibleEmail);
-//    boolean isEmailExist(String email);
     boolean checkIfDepartmentNameAvailable(String departmentName);
     boolean checkIfDepartmentAlreadyHaveResponsible(String departmentName);
 }

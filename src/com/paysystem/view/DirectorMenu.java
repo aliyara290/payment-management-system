@@ -2,31 +2,31 @@ package com.paysystem.view;
 
 import com.paysystem.controller.AuthController;
 import com.paysystem.controller.DirectorController;
-import com.paysystem.model.entities.Department;
 import com.paysystem.model.entities.User;
 import com.paysystem.repository.impl.AuthRepositoryImpl;
 import com.paysystem.repository.impl.DirectorRepositoryImpl;
 import com.paysystem.repository.interfaces.AuthInterface;
 import com.paysystem.repository.interfaces.DirectorInterface;
+import com.paysystem.service.StatisticsService;
 
-import java.sql.SQLOutput;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DirectorMenu {
     private DirectorController directorController;
     private DirectorInterface directorInterface;
     private AuthController authController;
+    private StatisticsService statisticsService;
     private Scanner scanner;
     private User loggedUser;
 
-    // Updated constructor to accept logged user
     public DirectorMenu(User loggedUser) {
         this.loggedUser = loggedUser;
         this.directorInterface = new DirectorRepositoryImpl();
         this.directorController = new DirectorController(this.directorInterface);
         AuthInterface authRepository = new AuthRepositoryImpl();
         this.authController = new AuthController(authRepository);
+        this.statisticsService = new StatisticsService();
         this.scanner = new Scanner(System.in);
     }
 
@@ -37,9 +37,8 @@ public class DirectorMenu {
             System.out.println("=".repeat(50));
             System.out.println("1. Manage Users");
             System.out.println("2. Manage Departments");
-            System.out.println("3. View All Payments");
-            System.out.println("4. View Departments Statistics");
-            System.out.println("5. Exit");
+            System.out.println("3. View Department Statistics");
+            System.out.println("4. Exit");
             System.out.println("=".repeat(50));
             System.out.print("Your choice (1-5): ");
 
@@ -54,12 +53,9 @@ public class DirectorMenu {
                         manageDepartment();
                         break;
                     case 3:
-                        System.out.println("not implemented yet!");
+                        viewDepartmentStatistics();
                         break;
                     case 4:
-                        System.out.println("not implemented yet!");
-                        break;
-                    case 5:
                         System.out.println("\nThank you for using PaySystem! Goodbye!");
                         running = false;
                         break;
@@ -75,6 +71,22 @@ public class DirectorMenu {
                 scanner.nextLine();
             }
         }
+    }
+
+    private void viewDepartmentStatistics() {
+        System.out.println("\n=================================================");
+        System.out.println("=========== DEPARTMENT STATISTICS ===============");
+        System.out.println("=================================================");
+        System.out.print("\nEnter Department Name: ");
+        String departmentName = scanner.nextLine().trim();
+
+        if (departmentName.isEmpty()) {
+            System.out.println("Department name cannot be empty!");
+            return;
+        }
+
+        Map<String, Object> stats = statisticsService.getDepartmentStatistics(departmentName);
+        statisticsService.displayDepartmentStatistics(stats);
     }
 
     public void manageDepartment() {
@@ -102,8 +114,11 @@ public class DirectorMenu {
                     case 2:
                         directorController.updateDepartment();
                         break;
-                    case 3, 4:
-                        System.out.println("Not implemented yet!");
+                    case 3:
+                        getDepartment();
+                        break;
+                    case 4:
+                        getAllDepartments();
                         break;
                     case 5:
                         directorController.deleteDepartment();
@@ -179,6 +194,74 @@ public class DirectorMenu {
                 System.out.println("\nPress Enter to continue...");
                 scanner.nextLine();
             }
+        }
+    }
+
+    private void getDepartment() {
+        System.out.println("\n==============================================");
+        System.out.println("-------------[ GET DEPARTMENT ]---------------");
+        System.out.println("==============================================");
+        System.out.print("\nEnter Department Name: ");
+        String departmentName = scanner.nextLine().trim();
+
+        if (departmentName.isEmpty()) {
+            System.out.println("Department name cannot be empty!");
+            return;
+        }
+
+        try {
+            Map<String, String> department = directorController.getDepartment(departmentName);
+
+            if (department == null || department.isEmpty()) {
+                System.out.println("\nDepartment not found!");
+                return;
+            }
+
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("              DEPARTMENT DETAILS");
+            System.out.println("=".repeat(60));
+            System.out.println("ID: " + department.get("id"));
+            System.out.println("Name: " + department.get("name"));
+            System.out.println("Created At: " + department.get("created_at"));
+            System.out.println("Updated At: " + department.get("updated_at"));
+            System.out.println("=".repeat(60));
+
+        } catch (Exception e) {
+            System.out.println("\nError retrieving department: " + e.getMessage());
+        }
+    }
+
+    private void getAllDepartments() {
+        System.out.println("\n" + "=".repeat(80));
+        System.out.println("                      ALL DEPARTMENTS");
+        System.out.println("=".repeat(80));
+
+        try {
+            java.util.List<Map<String, Object>> departments = directorController.getAllDepartments();
+
+            if (departments == null || departments.isEmpty()) {
+                System.out.println("No departments found!");
+                System.out.println("=".repeat(80));
+                return;
+            }
+
+            System.out.println("Total Departments: " + departments.size());
+            System.out.println("=".repeat(80));
+            System.out.printf("%-5s | %-30s | %-20s | %-20s%n",
+                    "ID", "Name", "Created At", "Updated At");
+            System.out.println("=".repeat(80));
+
+            for (Map<String, Object> dept : departments) {
+                System.out.printf("%-5s | %-30s | %-20s | %-20s%n",
+                        dept.get("id"),
+                        dept.get("name"),
+                        dept.get("created_at"),
+                        dept.get("updated_at"));
+            }
+            System.out.println("=".repeat(80));
+
+        } catch (Exception e) {
+            System.out.println("\nError retrieving departments: " + e.getMessage());
         }
     }
 }

@@ -4,6 +4,8 @@ import com.paysystem.model.entities.Department;
 import com.paysystem.repository.interfaces.DirectorInterface;
 import com.paysystem.service.DirectorService;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -72,5 +74,11 @@ public class DirectorController {
         }
     }
 
+    public Map<String, String> getDepartment(String departmentName) {
+        return directorService.getDepartment(departmentName);
+    }
 
+    public List<Map<String, Object>> getAllDepartments() {
+        return directorService.getAllDepartments();
+    }
 }

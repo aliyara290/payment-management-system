@@ -2,10 +2,13 @@ package com.paysystem.repository.impl;
 
 import com.paysystem.repository.interfaces.DirectorInterface;
 import com.paysystem.utils.Crud;
+import com.paysystem.utils.DatabaseConnection;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class DirectorRepositoryImpl implements DirectorInterface {
     @Override

@@ -34,4 +34,4 @@ CREATE TABLE IF NOT EXISTS payments (
 
 ALTER TABLE payments ADD type enum('salary', 'bonus', 'prime', 'compensation');
 
-select * from payments;
+select * from users;
